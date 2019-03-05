@@ -26,7 +26,7 @@ object RMem {
 /** Memory that can be written. */
 trait WMem extends IMem {
 
-  protected def write32(address: Int, value: Int)
+  protected def write32(address: Int, value: Int): Unit
 
   private def write64(address: Int, value: Long): Unit = {
     val a = value.toInt

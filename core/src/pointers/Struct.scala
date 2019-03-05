@@ -1,10 +1,10 @@
 package pointers
 
 abstract class Struct { self =>
-  val sizeof: SizeOf[Self]
+  def sizeof: SizeOf[Self]
   type Self = this.type
 
-  implicit val sizeOfInstance: SizeOf[Self] = sizeof.asInstanceOf[SizeOf[Self]]
+  implicit def sizeOfInstance: SizeOf[Self] = sizeof
 }
 
 /** Provides syntactic convenience to define Structs such as:
