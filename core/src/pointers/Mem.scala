@@ -61,3 +61,11 @@ trait Mem extends RMem with WMem with AMem
 object Mem {
   type Aux[X] = Mem { type M = X }
 }
+
+trait ReversibleMem extends IMem {
+  type BacktrackPoint <: Int
+
+  def save(): BacktrackPoint
+  def restoreLast(): Unit
+  def restore(bt: BacktrackPoint): Unit
+}

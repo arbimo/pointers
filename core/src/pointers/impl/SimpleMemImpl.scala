@@ -1,4 +1,6 @@
-package pointers
+package pointers.impl
+
+import pointers._
 
 final class SimpleMemImpl extends Mem {
 

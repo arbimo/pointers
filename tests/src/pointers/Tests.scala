@@ -1,6 +1,7 @@
 package pointers
 
 import minitest._
+import pointers.impl.SimpleMemImpl
 
 object Tests extends SimpleTestSuite {
 
