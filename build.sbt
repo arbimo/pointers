@@ -2,7 +2,7 @@ name := "pointers"
 
 version := "0.1"
 
-scalaVersion := "2.13.0-M5"
+scalaVersion := "2.12.8"
 
 libraryDependencies += "io.monix" %% "minitest" % "2.3.2" % "test"
 

@@ -2,9 +2,7 @@ package pointers
 
 import minitest._
 
-object Tests extends SimpleTestSuite with App {
-
-  override def test(name: String)(run: => api.Void) = run
+object Tests extends SimpleTestSuite {
 
   test("scalars") {
     val m = new SimpleMemImpl
