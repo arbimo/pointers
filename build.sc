@@ -12,6 +12,7 @@ def gitBasedVersion = T.input {
 
 object deps {
   val kindProjector = ivy"org.spire-math::kind-projector:0.9.8"
+  val acyclic = ivy"com.lihaoyi::acyclic:0.1.7"
 
   val minitest = ivy"io.monix::minitest:2.3.2"
   val minitestLaws = ivy"io.monix::minitest-laws:2.3.2"
@@ -22,8 +23,8 @@ trait PointersModule extends ScalaModule {
   def scalaVersion = "2.12.8"
   def scalacOptions = build.scalacOptions
 
-  override def compileIvyDeps = Agg(kindProjector)
-  override def scalacPluginIvyDeps = Agg(kindProjector)
+  override def compileIvyDeps = Agg(kindProjector, acyclic)
+  override def scalacPluginIvyDeps = Agg(kindProjector, acyclic)
 
   trait MiniTests extends super.Tests {
     def ivyDeps = Agg(minitest, minitestLaws)
@@ -51,14 +52,15 @@ object build extends Module {
     "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
     "-encoding", "utf-8",                // Specify character encoding used by source files.
     "-explaintypes",                     // Explain type errors in more detail.
+
+    // language features
     "-feature",                          // Emit warning and location for usages of features that should be imported explicitly.
-    "-language:existentials",            // Existential types (besides wildcard types) can be written and inferred
-    "-language:experimental.macros",     // Allow macro definition (besides implementation and application)
     "-language:higherKinds",             // Allow higher-kinded types
-    "-language:implicitConversions",     // Allow definition of implicit functions called views
+
+    // warnings
+    "-Xfatal-warnings",                  // Fail the compilation if there are any warnings.
     "-unchecked",                        // Enable additional warnings where generated code depends on assumptions.
     "-Xcheckinit",                       // Wrap field accessors to throw an exception on uninitialized access.
-    "-Xfatal-warnings",                  // Fail the compilation if there are any warnings.
     "-Xfuture",                          // Turn on future language features.
     "-Xlint:adapted-args",               // Warn if an argument list is modified to match the receiver.
     "-Xlint:by-name-right-associative",  // By-name parameter of right associative operator.
@@ -92,6 +94,9 @@ object build extends Module {
     "-Ywarn-unused:params",              // Warn if a value parameter is unused.
     "-Ywarn-unused:patvars",             // Warn if a variable bound in a pattern is unused.
     "-Ywarn-unused:privates",            // Warn if a private member is unused.
-    "-Ywarn-value-discard"               // Warn when non-Unit expression results are unused.
+    "-Ywarn-value-discard",               // Warn when non-Unit expression results are unused.
+
+    // Acyclic compiler plugin
+    "-P:acyclic:force"
   )
 }

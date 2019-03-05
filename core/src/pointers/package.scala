@@ -21,8 +21,5 @@ package object pointers {
   implicit class PtrOps[A, M](private val ptr: Ptr[A, M]) extends AnyVal {
     def apply[B](fo: FieldOffset[A, B]): Ptr[B, M] = (ptr + fo).asInstanceOf[Ptr[B, M]]
   }
-  implicit class IntPtrOps[M](private val ptr: Ptr[Int, M]) extends AnyVal {
-    def apply()(implicit mem: RMem.Aux[M]): Int = mem.readInt(ptr)
-  }
 
 }
