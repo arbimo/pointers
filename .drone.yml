@@ -1,0 +1,11 @@
+kind: pipeline
+name: default
+
+steps:
+- name: build
+  image: abitmonn/graal-mill:0.3.5
+  commands:
+  - mill core.compile
+  - mill tests.compile
+  - mill tests.test
+  
