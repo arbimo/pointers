@@ -5,6 +5,7 @@ import java.lang.{Double => JDouble}
 trait IMem {
   type M
   type Ptr[A] = pointers.Ptr[A, M]
+  type Vec[A] = pointers.Vec[A, M]
 }
 
 /** Memory that can be read. */
@@ -12,8 +13,7 @@ trait RMem extends IMem {
 
   protected def read32(address: Int): Int
 
-  private def read64(address: Int): Long =
-    read32(address).toLong | (read32(address + 1).toLong << 32)
+  private def read64(address: Int): Long = merge(read32(address), read32(address +1))
 
   final def readInt(p: Ptr[Int]): Int          = read32(p)
   final def readLong(p: Ptr[Long]): Long       = read64(p)
@@ -29,10 +29,8 @@ trait WMem extends IMem {
   protected def write32(address: Int, value: Int): Unit
 
   private def write64(address: Int, value: Long): Unit = {
-    val a = value.toInt
-    val b = (value >> 32).toInt
-    write32(address, a)
-    write32(address + 1, b)
+    write32(address, lower(value))
+    write32(address + 1, upper(value))
   }
 
   final def writeInt(p: Ptr[Int], value: Int): Unit    = write32(p, value)
@@ -51,6 +49,13 @@ trait AMem extends IMem {
 
   final def alloc[A](implicit sizeof: SizeOf[A]): Ptr[A] = allocMem(sizeof).asInstanceOf[Ptr[A]]
   final def alloc(struct: Struct): Ptr[struct.Self]      = alloc(struct.sizeof)
+
+  final def allocVec[A](n: Int)(implicit sizeOf: SizeOf[A]): Vec[A] = {
+    val first = allocMem(n * sizeOf)
+    val last = first + (n-1) * sizeOf
+    merge(first, last).asInstanceOf[Vec[A]]
+  }
+  final def allocVec(struct: Struct)(n: Int): Vec[struct.Self] = allocVec(n)(struct.sizeof)
 }
 object AMem {
   type Aux[X] = AMem { type M = X }

@@ -43,4 +43,26 @@ object Tests extends SimpleTestSuite {
 
   }
 
+  test("vecs") {
+    val m = new SimpleMemImpl
+
+    val vec = m.allocVec[Int](100)
+
+    assert(vec.length == 100)
+    assert(vec.tail.length == 99)
+
+    var curr = vec.first
+    var i = 0
+    val last = vec.last
+    while(curr <= last) {
+      m.writeInt(curr, i)
+      i += 1
+      curr = curr.unsafeNext
+    }
+
+    for(i <- 0 until 100) {
+      assert(m.readInt(vec(i)) == i)
+    }
+  }
+
 }
