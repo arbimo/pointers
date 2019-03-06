@@ -12,7 +12,7 @@ final class SimpleMemImpl extends Mem {
   override protected def write32(address: Int, value: Int): Unit = impl(address) = value
 
   override protected def allocMem(size: Int): Int = {
-    if(top + size < impl.length) {
+    if(top + size > impl.length) {
       impl = java.util.Arrays.copyOf(impl, math.max(impl.length * 2, top + size))
     }
     val ptr = top

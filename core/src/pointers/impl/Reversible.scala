@@ -72,7 +72,7 @@ final class Reversible extends Mem with ReversibleMem {
   }
 
   override protected def allocMem(size: Int): Int = {
-    if(top + size < impl.length) {
+    if(top + size > impl.length) {
       impl = java.util.Arrays.copyOf(impl, math.max(impl.length * 2, top + size))
     }
     if(lastBackTrackPoint != 0) {
